@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { normalizeTask, nextId, metrics, filterTasks, isOverdue, toCSV, parseBackup, demoData } from '../assets/core.js';
+const base={id:'IF-001',title:'Fix the endpoint',status:'progress',priority:'high',assignee:'Avery Chen',due:'2026-01-10',tags:['api','bug']};
+test('valid task is normalized and keeps safe attributes',()=>{const t=normalizeTask(base);assert.equal(t.status,'progress');assert.deepEqual(t.tags,['api','bug']);});
+test('empty title is rejected',()=>assert.throws(()=>normalizeTask({...base,title:'   '}),/title/));
+test('unknown values fall back to safe statuses',()=>{const t=normalizeTask({...base,status:'bad',priority:'bad'});assert.equal(t.status,'backlog');assert.equal(t.priority,'medium')});
+test('next ID does not reuse deleted issue IDs in list',()=>assert.equal(nextId([{id:'IF-012'},{id:'IF-003'}]),'IF-013'));
+test('metrics count completion and overdue',()=>{const tasks=[normalizeTask(base),normalizeTask({...base,id:'IF-002',status:'done'})];const m=metrics(tasks,'2026-02-01');assert.equal(m.completion,50);assert.equal(m.overdue,1)});
+test('completed issues are never overdue',()=>assert.equal(isOverdue({...base,status:'done'},'2026-02-01'),false));
+test('search and priority filters compose',()=>{const data=[normalizeTask(base),normalizeTask({...base,id:'IF-002',title:'Design homepage',priority:'low'})];assert.equal(filterTasks(data,{query:'endpoint',priority:'high'}).length,1);assert.equal(filterTasks(data,{query:'endpoint',priority:'low'}).length,0)});
+test('CSV escapes quotes and prefixes spreadsheet formulas',()=>{const csv=toCSV([normalizeTask({...base,title:'=HYPERLINK("bad")'})]);assert.ok(csv.includes('"\'=HYPERLINK(""bad"")"'))});
+test('backup round-trip succeeds',()=>{const data=demoData();const restored=parseBackup(JSON.stringify({schemaVersion:1,...data}));assert.equal(restored.tasks.length,10)});
+test('rejects duplicated issue IDs in backups',()=>{assert.throws(()=>parseBackup(JSON.stringify({schemaVersion:1,tasks:[base,base],activity:[]})),/Duplicate/)});

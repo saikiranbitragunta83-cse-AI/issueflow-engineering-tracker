@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="description" content="IssueFlow: an interactive engineering issue tracker with Kanban boards, task workflows, analytics and local-first persistence." />
+  <title>IssueFlow | Engineering Workspace</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><rect x="4" y="5" width="10" height="10" rx="3" fill="#a7f3d0"/><rect x="18" y="5" width="10" height="10" rx="3" fill="#6ee7b7"/><rect x="4" y="19" width="10" height="10" rx="3" fill="#34d399"/><rect x="18" y="19" width="10" height="10" rx="3" fill="#10b981"/></svg></span>
+        <div><span class="brand-name">issue<span>flow</span></span><small>ENGINEERING WORKSPACE</small></div>
+      </div>
+      <div class="workspace-card"><div class="workspace-symbol">S</div><div><strong>Studio Workspace</strong><small>Personal project board</small></div><span class="chevron">⌄</span></div>
+      <p class="side-label">WORKSPACE</p>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button data-view="overview" class="nav-item active"><span class="nav-icon">▦</span> Overview</button>
+        <button data-view="board" class="nav-item"><span class="nav-icon">▤</span> Kanban board</button>
+        <button data-view="issues" class="nav-item"><span class="nav-icon">☷</span> All issues</button>
+        <button data-view="activity" class="nav-item"><span class="nav-icon">◷</span> Activity log</button>
+      </nav>
+      <p class="side-label side-label-secondary">PROJECT DATA</p>
+      <nav class="side-nav" aria-label="Data management">
+        <button id="export-json" class="nav-item"><span class="nav-icon">↥</span> Export backup</button>
+        <button id="import-json" class="nav-item"><span class="nav-icon">↧</span> Import backup</button>
+        <button id="export-csv" class="nav-item"><span class="nav-icon">▣</span> Export CSV</button>
+      </nav>
+      <div class="side-bottom">
+        <div class="storage-note"><span class="online-dot"></span><div><strong>Local-first workspace</strong><small>Saved in this browser</small></div></div>
+        <button id="open-help" class="help-link">ⓘ About this demo <span>↗</span></button>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="breadcrumbs"><button id="mobile-menu" class="icon-button mobile-only" aria-label="Toggle navigation">☰</button><span>Workspace</span><span class="crumb-sep">/</span><strong id="breadcrumb-view">Overview</strong></div>
+        <div class="topbar-actions"><span class="offline-indicator"><span class="status-pulse"></span> Local demo</span><button id="theme-toggle" class="icon-button" title="Toggle appearance" aria-label="Toggle appearance">◐</button><div class="avatar" title="Demo workspace">SK</div></div>
+      </header>
+
+      <main class="content">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PROJECT OPERATIONS</div><h1 id="page-title">Project overview<span class="title-dot">.</span></h1><p id="page-subtitle">A clear view of the work that matters most.</p></div><button class="primary-button new-issue-btn" id="new-issue"><span>＋</span> New issue</button></div>
+
+        <section id="overview-view" class="view active-view" aria-label="Project overview">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-top">Total issues <span class="stat-glyph">▦</span></div><div class="stat-number" id="stat-total">0</div><div class="stat-foot">Across the entire workspace</div></div>
+            <div class="stat-card"><div class="stat-top">In progress <span class="stat-glyph blue">◈</span></div><div class="stat-number" id="stat-progress">0</div><div class="stat-foot"><span class="foot-mark blue">●</span> Actively being worked on</div></div>
+            <div class="stat-card"><div class="stat-top">Completed <span class="stat-glyph emerald">✓</span></div><div class="stat-number" id="stat-done">0</div><div class="stat-foot"><span class="foot-mark green">●</span> Delivered issues</div></div>
+            <div class="stat-card"><div class="stat-top">Overdue <span class="stat-glyph coral">⌁</span></div><div class="stat-number" id="stat-overdue">0</div><div class="stat-foot"><span class="foot-mark red">●</span> Unfinished and past due</div></div>
+          </div>
+          <div class="overview-layout">
+            <section class="panel analytics-panel"><div class="panel-head"><div><div class="panel-kicker">PERFORMANCE</div><h2>Project health</h2></div><span class="soft-tag">Live metrics</span></div><div class="progress-block"><div class="progress-header"><span>Completion rate</span><strong id="completion-value">0%</strong></div><div class="progress-track"><div id="completion-bar" class="progress-fill"></div></div></div><div class="status-legend" id="status-distribution"></div><p class="panel-hint">Metrics update automatically as issues move through the workflow.</p></section>
+            <section class="panel priority-panel"><div class="panel-head"><div><div class="panel-kicker">FOCUS</div><h2>Priority breakdown</h2></div><span class="soft-tag">Current issues</span></div><div id="priority-breakdown" class="priority-breakdown"></div><div class="priority-bottom">Keep critical issues visible and unblock work early.</div></section>
+          </div>
+          <div class="section-heading"><div><div class="panel-kicker">YOUR WORK</div><h2>Recently updated</h2></div><button class="text-link" id="view-all-issues">View all issues <span>↗</span></button></div>
+          <div id="recent-table" class="table-panel"></div>
+        </section>
+
+        <section id="board-view" class="view" aria-label="Kanban board">
+          <div class="filter-toolbar"><div class="search-field"><span>⌕</span><input type="search" class="issue-search" placeholder="Search issues, tags or people..." aria-label="Search issues" /></div><select class="priority-filter" aria-label="Filter by priority"><option value="all">All priorities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select><button id="reset-board-filters" class="secondary-button reset-filters">Clear filters</button></div>
+          <p class="board-tip">Drag issues between columns to update their status, or use the status selector inside an issue.</p>
+          <div class="board-columns" id="board-columns"></div>
+        </section>
+
+        <section id="issues-view" class="view" aria-label="All issues">
+          <div class="filter-toolbar"><div class="search-field"><span>⌕</span><input type="search" class="issue-search" placeholder="Search issues, tags or people..." aria-label="Search issues" /></div><select class="priority-filter" aria-label="Filter by priority"><option value="all">All priorities</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select><select id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option value="backlog">Backlog</option><option value="progress">In progress</option><option value="review">In review</option><option value="done">Done</option></select></div>
+          <div id="issues-table" class="table-panel"></div>
+        </section>
+
+        <section id="activity-view" class="view" aria-label="Activity log"><div class="panel activity-panel"><div class="panel-head"><div><div class="panel-kicker">AUDIT TRAIL</div><h2>Recent activity</h2></div><span class="soft-tag">Latest 60 events</span></div><div id="activity-list" class="activity-list"></div></div></section>
+        <footer class="content-footer"><span>IssueFlow · Engineering issue tracker</span><span>Local-first demonstration · No server-side accounts</span></footer>
+      </main>
+    </div>
+  </div>
+  <div id="sidebar-overlay" class="sidebar-overlay" hidden></div>
+  <dialog id="issue-dialog" class="issue-dialog" aria-labelledby="dialog-title"><form id="issue-form" method="dialog" novalidate><div class="dialog-header"><div><span class="panel-kicker">ISSUE DETAILS</span><h2 id="dialog-title">Create issue</h2></div><button type="button" class="close-btn" id="close-dialog" aria-label="Close">×</button></div><div class="dialog-content"><label class="field-label" for="issue-title">Issue title <span>*</span></label><input id="issue-title" name="title" maxlength="120" required placeholder="e.g. Fix dashboard loading state" /><label class="field-label" for="issue-description">Description</label><textarea id="issue-description" name="description" rows="3" maxlength="2000" placeholder="What needs to be done?"></textarea><div class="form-grid"><div><label class="field-label" for="issue-status">Status</label><select id="issue-status" name="status"><option value="backlog">Backlog</option><option value="progress">In progress</option><option value="review">In review</option><option value="done">Done</option></select></div><div><label class="field-label" for="issue-priority">Priority</label><select id="issue-priority" name="priority"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option><option value="critical">Critical</option></select></div><div><label class="field-label" for="issue-assignee">Assignee</label><input id="issue-assignee" name="assignee" maxlength="60" placeholder="e.g. Alex Morgan" /></div><div><label class="field-label" for="issue-due">Due date</label><input id="issue-due" name="due" type="date" /></div></div><label class="field-label" for="issue-tags">Tags <span class="muted-label">(comma-separated)</span></label><input id="issue-tags" name="tags" maxlength="150" placeholder="frontend, bug, performance" /><div id="dialog-error" class="form-error" role="alert" hidden></div></div><div class="dialog-actions"><button type="button" class="danger-button" id="delete-issue" hidden>Delete issue</button><div class="dialog-actions-right"><button type="button" class="secondary-button" id="cancel-dialog">Cancel</button><button type="submit" class="primary-button" id="save-issue">Create issue</button></div></div></form></dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><div><span class="panel-kicker">ABOUT ISSUEFLOW</span><h2>Built for focused engineering work.</h2></div><button type="button" class="close-btn" id="close-help" aria-label="Close">×</button></div><div class="help-content"><p>IssueFlow is a fully interactive, browser-based issue tracker built with vanilla JavaScript. It demonstrates workflow management, search and filtering, persistence, accessible dialogs, and tested application logic.</p><h3>How your data works</h3><p>Issues are stored in this browser's local storage. Changes persist across reloads here, but they do <strong>not</strong> sync across devices or accounts. Use <strong>Export backup</strong> to save a JSON copy, then <strong>Import backup</strong> on another browser.</p><h3>Keyboard shortcuts</h3><p><kbd>N</kbd> Create a new issue when you are not typing in a field.</p><h3>Privacy</h3><p>No backend or analytics tracker is installed. Avoid putting confidential information into a public/shared computer.</p><button type="button" class="primary-button" id="help-done">Got it</button></div></dialog>
+  <input id="backup-file" type="file" accept="application/json,.json" hidden />
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
