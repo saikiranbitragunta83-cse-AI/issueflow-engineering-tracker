@@ -1,28 +1,24 @@
 # IssueFlow user guide
 
-## Start
+## Quick start: no account needed
 
-Open the site and explore the sample issues. They are fictional test data and are loaded automatically when the site has no stored workspace. The local workspace is independent for each browser/device.
+Open the live application, choose **Overview**, **Kanban board**, or **All issues**. Sample issues are provided. Select **New issue** to add a title, priority, status, due date, assignee and tags. Drag a card between columns or edit its Status field to advance it. Use search and filters, export CSV, or save a JSON backup.
 
-## Views
+Guest demo changes are saved in the current browser. Opening the site elsewhere will show a separate guest workspace.
 
-- **Overview**: summary metrics, completion rate, status distribution, priority breakdown, recently updated issues.
-- **Kanban board**: draggable cards by workflow stage; click any card to edit. On touch devices, open a card and change its Status field.
-- **All issues**: list search and filters for status/priority.
-- **Activity log**: recent create/update/delete/status-move actions.
+## Cloud team workspace (when enabled by the site owner)
 
-## Create and manage issues
+Choose **Cloud / Login**, then **Continue with GitHub**. Your first login creates a private personal workspace. In the account dialog you can create another team workspace, switch between your workspaces, or join one using an invite code from a member. Anyone with the code and a signed-in account can join, so treat the code as private.
 
-Press **New issue**, fill in the title and optional fields, then save. Click any issue to edit or delete it. Press **N** while not typing to create an issue.
+Cloud issue changes appear on other signed-in devices after refreshing or within approximately 12 seconds while the page is visible. If there is no connection or the backend is paused, cloud edits are unavailable. Guest mode continues to function independently.
 
-## Backup and export
+## Install as an app
 
-Use **Export backup** to download `issueflow-backup.json`. Use **Import backup** to replace the current workspace with an earlier backup (you will see a confirmation). Use **Export CSV** for spreadsheet-compatible output.
+Use the **Install IssueFlow** sidebar button if your browser offers an install prompt, or use the browser's **Install app** or **Add to Home Screen** menu. This is a Progressive Web App, so no app-store account or fee is necessary.
 
-## Browser storage disclaimer
+## Backups and privacy
 
-The app stores data only in your local browser. Different devices and browsers do not share data automatically. If the browser's site data is cleared, the project data may be lost. Keep a JSON backup for anything you want to preserve.
-
-## GitHub Pages deployment
-
-Create a public repository and upload the entire project structure. In **Settings → Pages**, set Source to **Deploy from a branch**, branch to `main`, folder to `/(root)`, then Save. The app loads directly from the Pages URL. Do not change the folder layout or the relative `assets/` paths.
+- Guest issues live in localStorage; backups are recommended.
+- Cloud issues live in a hosted PostgreSQL database with membership-based access policies.
+- JSON backup exports work from either mode. **Import is restricted to guest mode** to avoid accidentally overwriting a team workspace.
+- Do not put sensitive personal or business data into a demonstration system.

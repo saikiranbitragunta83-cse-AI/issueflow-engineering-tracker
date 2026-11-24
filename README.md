@@ -1,84 +1,52 @@
-# IssueFlow | Engineering Issue Tracker
+# IssueFlow | Engineering Issue & Project Tracker
 
-A polished, responsive issue-tracking application for organizing software development work. Built with **HTML, CSS, and modern JavaScript**. No paid APIs, build tools, server, or framework are required to run the application.
+**Responsive Kanban boards, practical task management, project health dashboards, optional secure team workspaces, and an installable Progressive Web App.**
 
-![IssueFlow project dashboard](docs/preview-dashboard.png)
+**[Live application](https://saikiranbitragunta83-cse-ai.github.io/issueflow-engineering-tracker/)** · [Cloud setup guide](docs/CLOUD_SETUP.md) · [Architecture](docs/ARCHITECTURE.md)
 
-## Highlights
+![IssueFlow dashboard](docs/preview-dashboard.png)
 
-- Four-stage Kanban workflow: Backlog → In progress → In review → Done.
-- Drag-and-drop issue movement and keyboard-accessible issue editing.
-- Create, edit and delete issues with priority, assignee, due date, description and tags.
-- Issue search, filters, activity history, and project health dashboard.
-- Overdue and completion metrics calculated dynamically.
-- Browser storage for persistent data, JSON backup/restore and CSV export.
-- Dark/light themes, responsive layout, accessible form labels and dialogs.
-- Automated unit tests for business logic and data validation.
+## Features
 
-See also the [Kanban board preview](docs/preview-board.png).
+- Manage tasks and bugs through **Backlog → In progress → In review → Done**.
+- Drag and drop issue cards, search and filter by priority, edit assignees, due dates and tags.
+- Monitor completion, overdue work, priorities and recent activity.
+- **Instant guest demo:** seeded sample issues with local persistence and JSON/CSV export; no account needed.
+- **Optional team cloud:** GitHub authentication, PostgreSQL storage, shared workspaces and private invite codes (requires one-time Supabase configuration).
+- **Installable web app:** icons and web manifest with offline-capable application shell.
+- Accessible interface, responsive design, automated tests and documented deployment/security tradeoffs.
 
-## Technology
+![IssueFlow Kanban board](docs/preview-board.png)
+
+## Stack
 
 | Layer | Technology |
 |---|---|
-| UI | Semantic HTML5, modern CSS3 |
-| Logic | JavaScript ES modules |
-| Persistence | Web Storage API (`localStorage`) |
-| Testing | Built-in Node.js test runner |
-| Deployment | GitHub Pages (static hosting) |
+| Frontend | HTML5, CSS3, JavaScript ES modules |
+| Guest persistence | Browser localStorage |
+| Optional identity | Supabase Auth (GitHub OAuth) |
+| Optional cloud persistence | Supabase PostgreSQL and Row Level Security |
+| PWA | Web manifest, service worker, install icons |
+| Testing | Node.js built-in test runner |
+| Hosting | GitHub Pages |
 
-## Running locally
-
-Open `index.html` in a modern browser **via a local static web server** (ES modules need an HTTP origin). For example, if Python is installed:
+## Run & test locally
 
 ```bash
 python -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Open `http://localhost:8000/` from the project directory. Run `npm test` with Node.js 20+ to execute the automated tests.
 
-Alternatively, use VS Code's Live Server extension.
+## Deploy
 
-## Tests
+- Upload the repository contents to a public GitHub repository.
+- Go to **Settings → Pages → Deploy from a branch → main → /(root)**.
+- The guest demo and PWA work without any backend configuration.
+- To enable **real cross-device issue synchronization**, use [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md) to provision Supabase, run [`supabase/schema.sql`](supabase/schema.sql) and fill in the two **public** values in [`assets/config.js`](assets/config.js). Never publish service_role credentials or OAuth secrets.
 
-With Node.js 20+ installed:
+## Security and scope
 
-```bash
-npm test
-```
+Each cloud workspace is readable and writable only by signed-in members, enforced by database RLS. A valid invite code grants membership, so treat codes privately. Cloud workspaces require an internet connection. The guest demo remains per-browser and its sample records are synthetic. The free Supabase backend can pause after periods of inactivity.
 
-No external Node dependencies are required.
-
-## Deploy to GitHub Pages
-
-1. Create a new public GitHub repository named `issueflow-engineering-tracker`.
-2. Upload **the contents of this project directory** at the repository root, preserving the `assets/`, `tests/` and `docs/` folders.
-3. In the repository, open **Settings → Pages**.
-4. Under **Build and deployment**, select **Deploy from a branch**.
-5. Select branch **main**, folder **/(root)** and click **Save**.
-6. Open the Pages URL shown after deployment, typically `https://YOUR_USERNAME.github.io/issueflow-engineering-tracker/`.
-
-No secrets, cloud databases, or paid accounts are necessary.
-
-## Data architecture and limitations
-
-IssueFlow is a **local-first web demo**. All project data is stored **in the current browser on the current device**, not in a cloud database. Other visitors receive their own demonstration workspace and **cannot access your issues**. Use Export backup / Import backup to move data between devices. Clearing site data or using private browsing may remove the data. This version intentionally does **not** claim multi-user sign-in, remote synchronization, or enterprise-grade collaboration.
-
-A production expansion could add OAuth-based authentication, server-side APIs, PostgreSQL, row-level access controls and collaborative workspaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
-
-## Project structure
-
-```
-index.html            Page structure and semantic forms
-assets/styles.css     Responsive visual design
-assets/app.js         UI state, interactions and persistence
-assets/core.js        Pure validated issue/metrics/data logic
-assets/favicon.svg    App icon
-tests/core.test.mjs   Automated tests
-docs/ARCHITECTURE.md Architecture and engineering trade-offs
-docs/USER_GUIDE.md   Usage and deployment reference
-```
-
-## Development and provenance
-
-This repository demonstrates a self-contained issue-tracking application. Its capabilities should be described according to the features that actually run. All sample tasks and names are fictional.
+This is a portfolio-oriented engineering application, not an audited enterprise or guaranteed-uptime service. **Cloud collaboration is optional and is not active until the owner configures Supabase.**

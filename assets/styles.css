@@ -9,3 +9,29 @@ dialog{border:1px solid var(--border);background:var(--surface);color:var(--text
 @media (max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.overview-layout{grid-template-columns:1fr}.sidebar{position:fixed;transform:translateX(-103%);transition:transform .2s;box-shadow:var(--shadow)}.sidebar.sidebar-open{transform:translateX(0)}.mobile-only{display:grid}.content{padding:30px 20px}.topbar{padding:0 20px;height:65px}.board-columns{grid-template-columns:repeat(4,minmax(235px,1fr))}.offline-indicator{display:none}.page-heading{margin-bottom:24px}}
 @media (max-width:550px){.page-heading{align-items:start;flex-direction:column}.new-issue-btn{width:100%}.stats-grid{gap:10px}.stat-card{min-height:138px;padding:15px}.stat-number{font-size:32px}.status-legend{grid-template-columns:1fr}.panel{padding:20px}.filter-toolbar{display:grid;grid-template-columns:1fr 1fr}.search-field{grid-column:1/-1;max-width:none}.reset-filters{grid-column:1/-1}.filter-toolbar select{min-width:0}.content-footer{flex-direction:column;gap:5px}.form-grid{grid-template-columns:1fr}.dialog-header,.dialog-content,.dialog-actions{padding-left:19px;padding-right:19px}.dialog-actions{flex-wrap:wrap}.dialog-actions-right{width:100%;justify-content:flex-end}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Optional cloud collaboration controls and installable PWA affordances */
+.cloud-panel{padding:0 22px 18px;display:flex;flex-direction:column;gap:7px}
+.cloud-panel small{font-size:11px;color:#96a6c1;padding-left:4px}
+.cloud-button{width:100%;text-align:left;background:#133830;color:#9af6cf;border:1px solid #236852;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+.cloud-button:hover{background:#185040}
+.account-dialog{width:min(520px,calc(100% - 30px));max-height:85vh;overflow-y:auto;background:#101827;color:#e6effe;border:1px solid #29415c;border-radius:18px;padding:0;box-shadow:0 24px 70px #0008}
+.account-dialog::backdrop{background:rgba(2,7,18,.75)}
+.account-body{padding:22px 28px 28px}
+.account-body p{font-size:14px;color:#c3cce1;line-height:1.65;margin:0 0 16px}
+.account-muted{font-size:12px!important;color:#92a1bb!important}
+.account-notice{background:#2e2738;padding:12px 14px;border:1px solid #63506e;border-radius:10px}
+.cloud-action{margin:5px 0 14px;width:100%;justify-content:center}
+.account-input{background:#101f30;border:1px solid #35475e;border-radius:9px;color:#fff;padding:11px 12px;font:inherit;width:100%;min-width:0}
+.account-input:focus{outline:2px solid #48dba9;outline-offset:1px}
+.account-row{display:flex;gap:8px;align-items:center;margin:6px 0 16px}
+.account-row .secondary-button{white-space:nowrap}
+.account-divider{border-top:1px solid #2d3a51;margin:20px 0}
+.invite-code{overflow-wrap:anywhere;background:#0c1b2d;border:1px solid #385070;border-radius:8px;flex:1;padding:11px;color:#9ceccf;font-size:12px}
+.cloud-banner{position:fixed;bottom:16px;right:20px;background:#13382d;border:1px solid #2e8164;color:#beffe2;border-radius:10px;padding:8px 14px;font-size:12px;z-index:8;pointer-events:none;box-shadow:0 8px 18px #0004}
+[hidden]{display:none!important}
+@media(max-width:650px){.account-body{padding:18px}.cloud-banner{bottom:8px;right:8px;font-size:10px}}
+[data-theme="light"] .account-dialog{background:#fff;color:#202b42}
+[data-theme="light"] .account-body p{color:#31415a}
+[data-theme="light"] .account-input{background:#fff;color:#151e2b;border-color:#9daac0}
+[data-theme="light"] .cloud-button{background:#d1fbe4;color:#165a43}

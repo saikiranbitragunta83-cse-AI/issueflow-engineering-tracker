@@ -4,10 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1020" />
-  <meta name="description" content="IssueFlow: an interactive engineering issue tracker with Kanban boards, task workflows, analytics and local-first persistence." />
-  <title>IssueFlow | Engineering Workspace</title>
+  <meta name="description" content="IssueFlow is an engineering issue tracker with a Kanban board, task priorities, project insights, and optional secure cloud workspaces. Try the demo or install the web app." />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="IssueFlow | Engineering Task & Bug Tracker" />
+  <meta property="og:description" content="Manage issues with Kanban boards, priorities, activity tracking and secure team workspaces." />
+  <meta property="og:url" content="https://saikiranbitragunta83-cse-ai.github.io/issueflow-engineering-tracker/" />
+  <link rel="canonical" href="https://saikiranbitragunta83-cse-ai.github.io/issueflow-engineering-tracker/" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <title>IssueFlow by Sai Kiran | Engineering Issue Tracker</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="assets/styles.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"IssueFlow","applicationCategory":"BusinessApplication","operatingSystem":"Web, Android, Windows, iOS","url":"https://saikiranbitragunta83-cse-ai.github.io/issueflow-engineering-tracker/","description":"Engineering issue tracking with Kanban boards, priorities, analytics and collaborative workspaces.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <script type="module" src="assets/app.js"></script>
 </head>
 <body>
@@ -17,7 +26,8 @@
         <span class="brand-logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><rect x="4" y="5" width="10" height="10" rx="3" fill="#a7f3d0"/><rect x="18" y="5" width="10" height="10" rx="3" fill="#6ee7b7"/><rect x="4" y="19" width="10" height="10" rx="3" fill="#34d399"/><rect x="18" y="19" width="10" height="10" rx="3" fill="#10b981"/></svg></span>
         <div><span class="brand-name">issue<span>flow</span></span><small>ENGINEERING WORKSPACE</small></div>
       </div>
-      <div class="workspace-card"><div class="workspace-symbol">S</div><div><strong>Studio Workspace</strong><small>Personal project board</small></div><span class="chevron">⌄</span></div>
+      <div class="workspace-card"><div class="workspace-symbol">S</div><div><strong id="workspace-name">Studio Workspace</strong><small id="workspace-note">Personal project board</small></div><span class="chevron">⌄</span></div>
+      <div class="cloud-panel"><button id="account-button" class="cloud-button" type="button">☁ Cloud / Login</button><small id="cloud-indicator">Guest demo</small></div>
       <p class="side-label">WORKSPACE</p>
       <nav class="side-nav" aria-label="Main navigation">
         <button data-view="overview" class="nav-item active"><span class="nav-icon">▦</span> Overview</button>
@@ -32,15 +42,16 @@
         <button id="export-csv" class="nav-item"><span class="nav-icon">▣</span> Export CSV</button>
       </nav>
       <div class="side-bottom">
-        <div class="storage-note"><span class="online-dot"></span><div><strong>Local-first workspace</strong><small>Saved in this browser</small></div></div>
-        <button id="open-help" class="help-link">ⓘ About this demo <span>↗</span></button>
+        <div class="storage-note"><span class="online-dot"></span><div><strong id="cloud-storage-label">Local-first workspace</strong><small id="cloud-storage-info">Saved in this browser</small></div></div>
+        <button id="install-app" class="help-link" type="button">▣ Install IssueFlow <span>↗</span></button>
+        <button id="open-help" class="help-link">ⓘ About IssueFlow <span>↗</span></button>
       </div>
     </aside>
 
     <div class="main-area">
       <header class="topbar">
         <div class="breadcrumbs"><button id="mobile-menu" class="icon-button mobile-only" aria-label="Toggle navigation">☰</button><span>Workspace</span><span class="crumb-sep">/</span><strong id="breadcrumb-view">Overview</strong></div>
-        <div class="topbar-actions"><span class="offline-indicator"><span class="status-pulse"></span> Local demo</span><button id="theme-toggle" class="icon-button" title="Toggle appearance" aria-label="Toggle appearance">◐</button><div class="avatar" title="Demo workspace">SK</div></div>
+        <div class="topbar-actions"><span class="offline-indicator"><span class="status-pulse"></span><span id="top-cloud-label">Demo / Cloud ready</span></span><button id="theme-toggle" class="icon-button" title="Toggle appearance" aria-label="Toggle appearance">◐</button><div class="avatar" title="Demo workspace">SK</div></div>
       </header>
 
       <main class="content">
@@ -73,13 +84,41 @@
         </section>
 
         <section id="activity-view" class="view" aria-label="Activity log"><div class="panel activity-panel"><div class="panel-head"><div><div class="panel-kicker">AUDIT TRAIL</div><h2>Recent activity</h2></div><span class="soft-tag">Latest 60 events</span></div><div id="activity-list" class="activity-list"></div></div></section>
-        <footer class="content-footer"><span>IssueFlow · Engineering issue tracker</span><span>Local-first demonstration · No server-side accounts</span></footer>
+        <footer class="content-footer"><span>IssueFlow · Engineering issue tracker</span><span>Guest demo · Optional account-based workspaces</span></footer>
       </main>
     </div>
   </div>
   <div id="sidebar-overlay" class="sidebar-overlay" hidden></div>
   <dialog id="issue-dialog" class="issue-dialog" aria-labelledby="dialog-title"><form id="issue-form" method="dialog" novalidate><div class="dialog-header"><div><span class="panel-kicker">ISSUE DETAILS</span><h2 id="dialog-title">Create issue</h2></div><button type="button" class="close-btn" id="close-dialog" aria-label="Close">×</button></div><div class="dialog-content"><label class="field-label" for="issue-title">Issue title <span>*</span></label><input id="issue-title" name="title" maxlength="120" required placeholder="e.g. Fix dashboard loading state" /><label class="field-label" for="issue-description">Description</label><textarea id="issue-description" name="description" rows="3" maxlength="2000" placeholder="What needs to be done?"></textarea><div class="form-grid"><div><label class="field-label" for="issue-status">Status</label><select id="issue-status" name="status"><option value="backlog">Backlog</option><option value="progress">In progress</option><option value="review">In review</option><option value="done">Done</option></select></div><div><label class="field-label" for="issue-priority">Priority</label><select id="issue-priority" name="priority"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option><option value="critical">Critical</option></select></div><div><label class="field-label" for="issue-assignee">Assignee</label><input id="issue-assignee" name="assignee" maxlength="60" placeholder="e.g. Alex Morgan" /></div><div><label class="field-label" for="issue-due">Due date</label><input id="issue-due" name="due" type="date" /></div></div><label class="field-label" for="issue-tags">Tags <span class="muted-label">(comma-separated)</span></label><input id="issue-tags" name="tags" maxlength="150" placeholder="frontend, bug, performance" /><div id="dialog-error" class="form-error" role="alert" hidden></div></div><div class="dialog-actions"><button type="button" class="danger-button" id="delete-issue" hidden>Delete issue</button><div class="dialog-actions-right"><button type="button" class="secondary-button" id="cancel-dialog">Cancel</button><button type="submit" class="primary-button" id="save-issue">Create issue</button></div></div></form></dialog>
-  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><div><span class="panel-kicker">ABOUT ISSUEFLOW</span><h2>Built for focused engineering work.</h2></div><button type="button" class="close-btn" id="close-help" aria-label="Close">×</button></div><div class="help-content"><p>IssueFlow is a fully interactive, browser-based issue tracker built with vanilla JavaScript. It demonstrates workflow management, search and filtering, persistence, accessible dialogs, and tested application logic.</p><h3>How your data works</h3><p>Issues are stored in this browser's local storage. Changes persist across reloads here, but they do <strong>not</strong> sync across devices or accounts. Use <strong>Export backup</strong> to save a JSON copy, then <strong>Import backup</strong> on another browser.</p><h3>Keyboard shortcuts</h3><p><kbd>N</kbd> Create a new issue when you are not typing in a field.</p><h3>Privacy</h3><p>No backend or analytics tracker is installed. Avoid putting confidential information into a public/shared computer.</p><button type="button" class="primary-button" id="help-done">Got it</button></div></dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="dialog-header"><div><span class="panel-kicker">ABOUT ISSUEFLOW</span><h2>Built for focused engineering work.</h2></div><button type="button" class="close-btn" id="close-help" aria-label="Close">×</button></div><div class="help-content"><p>IssueFlow is a fully interactive, browser-based issue tracker built with vanilla JavaScript. It demonstrates workflow management, search and filtering, persistence, accessible dialogs, and tested application logic.</p><h3>How your data works</h3><p>In guest demo mode issues are saved locally in this browser. With GitHub sign-in (when the database is connected), issues are stored in a private, shared Supabase workspace and refreshed across devices. Invite codes let teammates join the same workspace. Cloud edits require an internet connection; guest changes do not automatically migrate.</p><h3>Keyboard shortcuts</h3><p><kbd>N</kbd> Create a new issue when you are not typing in a field.</p><h3>Privacy</h3><p>Do not add passwords, confidential company information, or personal secrets to demo tasks. Cloud workspaces use database row-level access policies; invite codes should only be shared with trusted teammates.</p><button type="button" class="primary-button" id="help-done">Got it</button></div></dialog>
+  <dialog id="account-dialog" class="account-dialog" aria-label="Cloud workspace account">
+    <div class="dialog-header"><div><span class="panel-kicker">ISSUEFLOW CLOUD</span><h2>Workspaces & sign-in</h2></div><button type="button" class="close-btn" id="account-close" aria-label="Close">×</button></div>
+    <div class="account-body">
+      <div id="account-loggedout">
+        <p>Interviewers can use the guest demo instantly. Sign in with GitHub to keep your own issues synchronized on different devices and collaborate with teammates.</p>
+        <p id="cloud-unavailable" class="account-notice">Cloud is not configured by the site owner yet. The guest demo remains fully functional.</p>
+        <button type="button" class="primary-button cloud-action" id="github-login">↗ Continue with GitHub</button>
+        <p class="account-muted">No GitHub password is shared with this website. Authentication is handled by the provider.</p>
+      </div>
+      <div id="account-loggedin" hidden>
+        <p class="account-muted">Signed in as <strong id="signedin-as"></strong></p>
+        <label class="field-label" for="workspace-picker">Current team workspace</label>
+        <select id="workspace-picker" class="account-input"></select>
+        <button type="button" class="secondary-button cloud-action" id="sync-now">↻ Refresh cloud data</button>
+        <div class="account-divider"></div>
+        <label class="field-label" for="workspace-new-name">Create a workspace</label>
+        <div class="account-row"><input id="workspace-new-name" class="account-input" maxlength="80" placeholder="e.g. Team Apollo"/><button type="button" class="secondary-button" id="workspace-create">Create</button></div>
+        <label class="field-label" for="workspace-join-code">Join a teammate's workspace</label>
+        <div class="account-row"><input id="workspace-join-code" class="account-input" maxlength="36" placeholder="Paste a private invite code"/><button type="button" class="secondary-button" id="workspace-join">Join</button></div>
+        <div class="account-divider"></div>
+        <p class="account-muted">Private invite code for this workspace:</p>
+        <div class="account-row"><code id="invite-code" class="invite-code"></code><button type="button" class="secondary-button" id="invite-copy">Copy</button></div>
+        <p class="account-muted">Anyone who signs in and has this code can join. Keep it private.</p>
+        <button type="button" class="secondary-button cloud-action" id="account-signout">Sign out · Return to demo</button>
+      </div>
+    </div>
+  </dialog>
+  <div id="cloud-warning" class="cloud-banner" hidden>☁ Cloud workspace · changes sync to members with access</div>
   <input id="backup-file" type="file" accept="application/json,.json" hidden />
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
